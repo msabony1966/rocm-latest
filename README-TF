@@ -1,0 +1,42 @@
+
+
+    Step 1 install new Ubuntu 16.04.0 LTS
+
+                sudo apt update
+        sudo apt -y upgrade
+ 
+
+    Step 2 install ROCM kernel (DKMS) https://github.com/RadeonOpenCompute/ROCm-docker 
+
+ 
+wget -qO - http://repo.radeon.com/rocm/apt/debian/rocm.gpg.key | sudo apt-key add -
+   echo deb [arch=amd64] http://repo.radeon.com/rocm/apt/debian/ xenial main | sudo tee /etc/apt/sources.list.d/rocm.list
+  sudo apt-get update && sudo apt-get install compute-firmware rock-dkms
+  sudo apt-get install  rock-dkms
+  sudo adduser $LOGNAME video
+lsmod | grep kfd
+amdkfd                274432  4
+amd_iommu_v2           20480  1 amdkfd
+amdkcl                 24576  4 amdttm,amdgpu,amd_sched,amdkfd
+ 
+ 
+
+    Step 3 Install Docker 
+
+sudo apt-get install     apt-transport-https     ca-certificates     curl     software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo apt-key fingerprint 0EBFCD88
+sudo add-apt-repository    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+(lsb_release -cs) stable"
+sudo apt-get update
+sudo apt-get install docker-ce
+sudo usermod -aG docker $USER
+ 
+
+    Step 4 down load the Tensorflow image https://hub.docker.com/r/rocm/tensorflow/ 
+
+sudo docker pull  rocm/tensorflow
+ 
+sudo docker run -it --device=/dev/kfd --device=/dev/dri --group-add video --name tf --netwrok host rocm/tensoflow
+ 
+                sudo docker start -a -I tf
