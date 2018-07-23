@@ -37,6 +37,6 @@ sudo usermod -aG docker $USER
 
 sudo docker pull  rocm/tensorflow
  
-sudo docker run -it --device=/dev/kfd --device=/dev/dri --group-add video --name tf --netwrok host rocm/tensoflow
- 
-                sudo docker start -a -I tf
+docker run -it --device=/dev/kfd --device=/dev/dri --group-add video --name tf --netwrok host rocm/tensoflow
+docker run -it --device=/dev/kfd --device=/dev/dri --group-add video --name tf --network host --volume="$HOME/.Xauthority:/root/.Xauthority:rw" --env="DISPLAY" -v $HOME/dockerx:/dockerx <your tf image> /bin/bash
+docker start -a -I tf
